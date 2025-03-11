@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lz.manage.mapper.TaskInfoMapper">
+    
+    <resultMap type="TaskInfo" id="TaskInfoResult">
+        <result property="id"    column="id"    />
+        <result property="clientId"    column="client_id"    />
+        <result property="demandId"    column="demand_id"    />
+        <result property="taskName"    column="task_name"    />
+        <result property="furnishSpace"    column="furnish_space"    />
+        <result property="taskStatus"    column="task_status"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTaskInfoVo">
+        select id, client_id, demand_id, task_name, furnish_space, task_status, user_id, dept_id, create_time, update_by, update_time, remark from tb_task_info
+    </sql>
+
+    <select id="selectTaskInfoList" parameterType="TaskInfo" resultMap="TaskInfoResult">
+        <include refid="selectTaskInfoVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="clientId != null "> and client_id = #{clientId}</if>
+            <if test="demandId != null "> and demand_id = #{demandId}</if>
+            <if test="taskName != null  and taskName != ''"> and task_name like concat('%', #{taskName}, '%')</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and task_status = #{taskStatus}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaskInfoById" parameterType="Long" resultMap="TaskInfoResult">
+        <include refid="selectTaskInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTaskInfo" parameterType="TaskInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_task_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">client_id,</if>
+            <if test="demandId != null">demand_id,</if>
+            <if test="taskName != null and taskName != ''">task_name,</if>
+            <if test="furnishSpace != null">furnish_space,</if>
+            <if test="taskStatus != null and taskStatus != ''">task_status,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">#{clientId},</if>
+            <if test="demandId != null">#{demandId},</if>
+            <if test="taskName != null and taskName != ''">#{taskName},</if>
+            <if test="furnishSpace != null">#{furnishSpace},</if>
+            <if test="taskStatus != null and taskStatus != ''">#{taskStatus},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaskInfo" parameterType="TaskInfo">
+        update tb_task_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientId != null">client_id = #{clientId},</if>
+            <if test="demandId != null">demand_id = #{demandId},</if>
+            <if test="taskName != null and taskName != ''">task_name = #{taskName},</if>
+            <if test="furnishSpace != null">furnish_space = #{furnishSpace},</if>
+            <if test="taskStatus != null and taskStatus != ''">task_status = #{taskStatus},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTaskInfoById" parameterType="Long">
+        delete from tb_task_info where id = #{id}
+    </delete>
+
+    <delete id="deleteTaskInfoByIds" parameterType="String">
+        delete from tb_task_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

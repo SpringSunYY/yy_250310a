@@ -10,7 +10,7 @@
 
     <name>furniture</name>
     <url>http://www.ruoyi.vip</url>
-    <description>家居装修管理系统</description>
+    <description>家具装修管理系统</description>
 
     <properties>
         <furniture.version>3.8.9</furniture.version>
@@ -233,6 +233,12 @@
                 <artifactId>furniture-common</artifactId>
                 <version>${furniture.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.lz</groupId>
+                <artifactId>furniture-manage</artifactId>
+                <version>${furniture.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -243,6 +249,7 @@
         <module>furniture-quartz</module>
         <module>furniture-generator</module>
         <module>furniture-common</module>
+        <module>furniture-manage</module>
     </modules>
     <packaging>pom</packaging>
 

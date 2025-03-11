@@ -60,6 +60,11 @@
             <groupId>com.lz</groupId>
             <artifactId>furniture-generator</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.lz</groupId>
+            <artifactId>furniture-manage</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

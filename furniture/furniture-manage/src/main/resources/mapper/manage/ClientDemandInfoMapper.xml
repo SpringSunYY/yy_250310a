@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lz.manage.mapper.ClientDemandInfoMapper">
+    
+    <resultMap type="ClientDemandInfo" id="ClientDemandInfoResult">
+        <result property="id"    column="id"    />
+        <result property="clientId"    column="client_id"    />
+        <result property="demandName"    column="demand_name"    />
+        <result property="floorSpace"    column="floor_space"    />
+        <result property="address"    column="address"    />
+        <result property="buildOrientation"    column="build_orientation"    />
+        <result property="furnishStyle"    column="furnish_style"    />
+        <result property="totalBudget"    column="total_budget"    />
+        <result property="expectStartTime"    column="expect_start_time"    />
+        <result property="expectEndTime"    column="expect_end_time"    />
+        <result property="demandStatus"    column="demand_status"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectClientDemandInfoVo">
+        select id, client_id, demand_name, floor_space, address, build_orientation, furnish_style, total_budget, expect_start_time, expect_end_time, demand_status, user_id, dept_id, create_time, update_by, update_time, remark from tb_client_demand_info
+    </sql>
+
+    <select id="selectClientDemandInfoList" parameterType="ClientDemandInfo" resultMap="ClientDemandInfoResult">
+        <include refid="selectClientDemandInfoVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="clientId != null "> and client_id = #{clientId}</if>
+            <if test="demandName != null  and demandName != ''"> and demand_name like concat('%', #{demandName}, '%')</if>
+            <if test="params.beginExpectStartTime != null and params.beginExpectStartTime != '' and params.endExpectStartTime != null and params.endExpectStartTime != ''"> and expect_start_time between #{params.beginExpectStartTime} and #{params.endExpectStartTime}</if>
+            <if test="params.beginExpectEndTime != null and params.beginExpectEndTime != '' and params.endExpectEndTime != null and params.endExpectEndTime != ''"> and expect_end_time between #{params.beginExpectEndTime} and #{params.endExpectEndTime}</if>
+            <if test="demandStatus != null  and demandStatus != ''"> and demand_status = #{demandStatus}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectClientDemandInfoById" parameterType="Long" resultMap="ClientDemandInfoResult">
+        <include refid="selectClientDemandInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertClientDemandInfo" parameterType="ClientDemandInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_client_demand_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">client_id,</if>
+            <if test="demandName != null and demandName != ''">demand_name,</if>
+            <if test="floorSpace != null">floor_space,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="buildOrientation != null and buildOrientation != ''">build_orientation,</if>
+            <if test="furnishStyle != null and furnishStyle != ''">furnish_style,</if>
+            <if test="totalBudget != null">total_budget,</if>
+            <if test="expectStartTime != null">expect_start_time,</if>
+            <if test="expectEndTime != null">expect_end_time,</if>
+            <if test="demandStatus != null and demandStatus != ''">demand_status,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clientId != null">#{clientId},</if>
+            <if test="demandName != null and demandName != ''">#{demandName},</if>
+            <if test="floorSpace != null">#{floorSpace},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="buildOrientation != null and buildOrientation != ''">#{buildOrientation},</if>
+            <if test="furnishStyle != null and furnishStyle != ''">#{furnishStyle},</if>
+            <if test="totalBudget != null">#{totalBudget},</if>
+            <if test="expectStartTime != null">#{expectStartTime},</if>
+            <if test="expectEndTime != null">#{expectEndTime},</if>
+            <if test="demandStatus != null and demandStatus != ''">#{demandStatus},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateClientDemandInfo" parameterType="ClientDemandInfo">
+        update tb_client_demand_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clientId != null">client_id = #{clientId},</if>
+            <if test="demandName != null and demandName != ''">demand_name = #{demandName},</if>
+            <if test="floorSpace != null">floor_space = #{floorSpace},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="buildOrientation != null and buildOrientation != ''">build_orientation = #{buildOrientation},</if>
+            <if test="furnishStyle != null and furnishStyle != ''">furnish_style = #{furnishStyle},</if>
+            <if test="totalBudget != null">total_budget = #{totalBudget},</if>
+            <if test="expectStartTime != null">expect_start_time = #{expectStartTime},</if>
+            <if test="expectEndTime != null">expect_end_time = #{expectEndTime},</if>
+            <if test="demandStatus != null and demandStatus != ''">demand_status = #{demandStatus},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteClientDemandInfoById" parameterType="Long">
+        delete from tb_client_demand_info where id = #{id}
+    </delete>
+
+    <delete id="deleteClientDemandInfoByIds" parameterType="String">
+        delete from tb_client_demand_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
