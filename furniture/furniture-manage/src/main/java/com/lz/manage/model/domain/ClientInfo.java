@@ -48,6 +48,8 @@ public class ClientInfo implements Serializable
 
     /** 创建人 */
     @Excel(name = "创建人")
+    @TableField(exist = false)
+    private String userName;
     private Long userId;
 
     /** 创建时间 */

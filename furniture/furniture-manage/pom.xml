@@ -23,6 +23,11 @@
             <artifactId>furniture-common</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.lz</groupId>
+            <artifactId>furniture-system</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

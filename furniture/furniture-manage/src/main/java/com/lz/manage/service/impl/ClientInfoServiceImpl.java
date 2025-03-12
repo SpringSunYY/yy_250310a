@@ -5,11 +5,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
+
+import com.lz.common.core.domain.entity.SysUser;
+import com.lz.common.utils.SecurityUtils;
 import com.lz.common.utils.StringUtils;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lz.common.utils.DateUtils;
 import javax.annotation.Resource;
+
+import com.lz.system.service.ISysUserService;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -30,6 +35,9 @@ public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientI
 {
     @Resource
     private ClientInfoMapper clientInfoMapper;
+
+    @Resource
+    private ISysUserService userService;
 
     //region mybatis代码
     /**
@@ -53,7 +61,14 @@ public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientI
     @Override
     public List<ClientInfo> selectClientInfoList(ClientInfo clientInfo)
     {
-        return clientInfoMapper.selectClientInfoList(clientInfo);
+        List<ClientInfo> clientInfos = clientInfoMapper.selectClientInfoList(clientInfo);
+        for (ClientInfo info : clientInfos) {
+            SysUser user = userService.selectUserById(info.getUserId());
+            if (StringUtils.isNotNull(user)) {
+                info.setUserName(user.getUserName());
+            }
+        }
+        return clientInfos;
     }
 
     /**
@@ -65,6 +80,7 @@ public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientI
     @Override
     public int insertClientInfo(ClientInfo clientInfo)
     {
+        clientInfo.setUserId(SecurityUtils.getUserId());
         clientInfo.setCreateTime(DateUtils.getNowDate());
         return clientInfoMapper.insertClientInfo(clientInfo);
     }
@@ -78,6 +94,7 @@ public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientI
     @Override
     public int updateClientInfo(ClientInfo clientInfo)
     {
+        clientInfo.setUpdateBy(SecurityUtils.getUsername());
         clientInfo.setUpdateTime(DateUtils.getNowDate());
         return clientInfoMapper.updateClientInfo(clientInfo);
     }

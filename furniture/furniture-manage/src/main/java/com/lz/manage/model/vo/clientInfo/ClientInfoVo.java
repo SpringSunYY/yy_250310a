@@ -44,6 +44,8 @@ public class ClientInfoVo implements Serializable
     @Excel(name = "创建人")
     private Long userId;
 
+    private String userName;
+
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
