@@ -1,29 +1,51 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="编号" prop="id">
-        <el-input
-          v-model="queryParams.id"
-          placeholder="请输入编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+      <!--      <el-form-item label="编号" prop="id">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.id"-->
+      <!--          placeholder="请输入编号"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
       <el-form-item label="客户" prop="clientId">
-        <el-input
+        <el-select
           v-model="queryParams.clientId"
-          placeholder="请输入客户"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入客户名称"
+          :remote-method="selectClientInfoList"
+          :loading="clientLoading"
+        >
+          <el-option
+            v-for="item in clientInfoList"
+            :key="item.id"
+            :label="item.clientName"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="需求" prop="demandId">
-        <el-input
+        <el-select
           v-model="queryParams.demandId"
-          placeholder="请输入需求"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入需求名称"
+          :remote-method="selectDemandInfoList"
+          :loading="demandLoading"
+        >
+          <el-option
+            v-for="item in demandInfoList"
+            :key="item.id"
+            :label="item.demandName"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="支付状态" prop="payStatus">
         <el-select v-model="queryParams.payStatus" placeholder="请选择支付状态" clearable>
@@ -36,21 +58,32 @@
         </el-select>
       </el-form-item>
       <el-form-item label="销售员" prop="userId">
-        <el-input
+        <el-select
           v-model="queryParams.userId"
-          placeholder="请输入销售员"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入用户账号"
+          :remote-method="selectSalesUserInfoList"
+          :loading="salesUserLoading"
+        >
+          <el-option
+            v-for="item in salesUserInfoList"
+            :key="item.userId"
+            :label="item.userName"
+            :value="item.userId"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="部门" prop="deptId">
-        <el-input
-          v-model="queryParams.deptId"
-          placeholder="请输入部门"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+      <!--      <el-form-item label="部门" prop="deptId">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.deptId"-->
+      <!--          placeholder="请输入部门"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
       <el-form-item label="创建时间">
         <el-date-picker
           v-model="daterangeCreateTime"
@@ -62,25 +95,25 @@
           end-placeholder="结束日期"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="更新人" prop="updateBy">
-        <el-input
-          v-model="queryParams.updateBy"
-          placeholder="请输入更新人"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="更新时间">
-        <el-date-picker
-          v-model="daterangeUpdateTime"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
-      </el-form-item>
+      <!--      <el-form-item label="更新人" prop="updateBy">-->
+      <!--        <el-input-->
+      <!--          v-model="queryParams.updateBy"-->
+      <!--          placeholder="请输入更新人"-->
+      <!--          clearable-->
+      <!--          @keyup.enter.native="handleQuery"-->
+      <!--        />-->
+      <!--      </el-form-item>-->
+      <!--      <el-form-item label="更新时间">-->
+      <!--        <el-date-picker-->
+      <!--          v-model="daterangeUpdateTime"-->
+      <!--          style="width: 240px"-->
+      <!--          value-format="yyyy-MM-dd"-->
+      <!--          type="daterange"-->
+      <!--          range-separator="-"-->
+      <!--          start-placeholder="开始日期"-->
+      <!--          end-placeholder="结束日期"-->
+      <!--        ></el-date-picker>-->
+      <!--      </el-form-item>-->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -96,7 +129,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['manage:clientDealInfo:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -107,7 +141,8 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['manage:clientDealInfo:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -118,7 +153,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['manage:clientDealInfo:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -128,23 +164,30 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['manage:clientDealInfo:export']"
-        >导出</el-button>
+        >导出
+        </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="clientDealInfoList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="编号" align="center" v-if="columns[0].visible" prop="id" />
-        <el-table-column label="客户" :show-overflow-tooltip="true" align="center" v-if="columns[1].visible" prop="clientId" />
-        <el-table-column label="需求" :show-overflow-tooltip="true" align="center" v-if="columns[2].visible" prop="demandId" />
-        <el-table-column label="总金额" :show-overflow-tooltip="true" align="center" v-if="columns[3].visible" prop="totalPrice" />
-        <el-table-column label="支付状态" align="center" v-if="columns[4].visible" prop="payStatus">
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="编号" align="center" v-if="columns[0].visible" prop="id"/>
+      <el-table-column label="客户" :show-overflow-tooltip="true" align="center" v-if="columns[1].visible"
+                       prop="clientName"
+      />
+      <el-table-column label="需求" :show-overflow-tooltip="true" align="center" v-if="columns[2].visible"
+                       prop="demandName"
+      />
+      <el-table-column label="总金额" :show-overflow-tooltip="true" align="center" v-if="columns[3].visible"
+                       prop="totalPrice"
+      />
+      <el-table-column label="支付状态" align="center" v-if="columns[4].visible" prop="payStatus">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.pay_status" :value="scope.row.payStatus"/>
         </template>
       </el-table-column>
-        <el-table-column label="合同附件" align="center" v-if="columns[5].visible" prop="contractFile" width="100">
+      <el-table-column label="合同附件" align="center" v-if="columns[5].visible" prop="contractFile" width="100">
         <template slot-scope="scope">
           <el-link v-show="scope.row.contractFile!=null"
                    :download="getFileName(scope.row.contractFile)"
@@ -156,21 +199,29 @@
           </el-link>
         </template>
       </el-table-column>
-        <el-table-column label="销售员" :show-overflow-tooltip="true" align="center" v-if="columns[6].visible" prop="userId" />
-        <el-table-column label="部门" :show-overflow-tooltip="true" align="center" v-if="columns[7].visible" prop="deptId" />
-        <el-table-column label="创建时间" align="center" v-if="columns[8].visible" prop="createTime" width="180">
+      <el-table-column label="销售员" :show-overflow-tooltip="true" align="center" v-if="columns[6].visible"
+                       prop="userName"
+      />
+      <el-table-column label="部门" :show-overflow-tooltip="true" align="center" v-if="columns[7].visible"
+                       prop="deptName"
+      />
+      <el-table-column label="创建时间" align="center" v-if="columns[8].visible" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-        <el-table-column label="更新人" :show-overflow-tooltip="true" align="center" v-if="columns[9].visible" prop="updateBy" />
-        <el-table-column label="更新时间" align="center" v-if="columns[10].visible" prop="updateTime" width="180">
+      <el-table-column label="更新人" :show-overflow-tooltip="true" align="center" v-if="columns[9].visible"
+                       prop="updateBy"
+      />
+      <el-table-column label="更新时间" align="center" v-if="columns[10].visible" prop="updateTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-        <el-table-column label="备注" :show-overflow-tooltip="true" align="center" v-if="columns[11].visible" prop="remark" />
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="备注" :show-overflow-tooltip="true" align="center" v-if="columns[11].visible"
+                       prop="remark"
+      />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -178,14 +229,16 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['manage:clientDealInfo:edit']"
-          >修改</el-button>
+          >修改
+          </el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['manage:clientDealInfo:remove']"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -201,14 +254,30 @@
     <!-- 添加或修改客户交易对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="客户" prop="clientId">
-          <el-input v-model="form.clientId" placeholder="请输入客户" />
-        </el-form-item>
+        <!--        <el-form-item label="客户" prop="clientId">-->
+        <!--          <el-input v-model="form.clientId" placeholder="请输入客户" />-->
+        <!--        </el-form-item>-->
         <el-form-item label="需求" prop="demandId">
-          <el-input v-model="form.demandId" placeholder="请输入需求" />
+          <el-select
+            v-model="form.demandId"
+            filterable
+            remote
+            reserve-keyword
+            placeholder="请输入需求名称"
+            :remote-method="selectDemandInfoList"
+            :loading="demandLoading"
+          >
+            <el-option
+              v-for="item in demandInfoList"
+              :key="item.id"
+              :label="item.demandName"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="总金额" prop="totalPrice">
-          <el-input v-model="form.totalPrice" placeholder="请输入总金额" />
+          <el-input-number :precision="2" :step="0.1" :min="0" v-model="form.totalPrice" placeholder="请输入总金额"/>
         </el-form-item>
         <el-form-item label="支付状态" prop="payStatus">
           <el-radio-group v-model="form.payStatus">
@@ -216,20 +285,21 @@
               v-for="dict in dict.type.pay_status"
               :key="dict.value"
               :label="dict.value"
-            >{{dict.label}}</el-radio>
+            >{{ dict.label }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="合同附件" prop="contractFile">
           <file-upload v-model="form.contractFile"/>
         </el-form-item>
-        <el-form-item label="销售员" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入销售员" />
-        </el-form-item>
-        <el-form-item label="部门" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入部门" />
-        </el-form-item>
+        <!--        <el-form-item label="销售员" prop="userId">-->
+        <!--          <el-input v-model="form.userId" placeholder="请输入销售员" />-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="部门" prop="deptId">-->
+        <!--          <el-input v-model="form.deptId" placeholder="请输入部门" />-->
+        <!--        </el-form-item>-->
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -241,29 +311,64 @@
 </template>
 
 <script>
-import { listClientDealInfo, getClientDealInfo, delClientDealInfo, addClientDealInfo, updateClientDealInfo } from "@/api/manage/clientDealInfo";
+import {
+  listClientDealInfo,
+  getClientDealInfo,
+  delClientDealInfo,
+  addClientDealInfo,
+  updateClientDealInfo
+} from '@/api/manage/clientDealInfo'
+import { listClientInfo } from '@/api/manage/clientInfo'
+import { allocatedUserList } from '@/api/system/role'
+import { listClientDemandInfo } from '@/api/manage/clientDemandInfo'
 
 export default {
-  name: "ClientDealInfo",
+  name: 'ClientDealInfo',
   dicts: ['pay_status'],
   data() {
     return {
+      //销售相关信息
+      salesUserInfoList: [],
+      salesUserLoading: false,
+      salesUserQueryParams: {
+        userName: '',
+        roleId: 100,
+        pageNum: 1,
+        pageSize: 100
+      },
+      //客户相关信息
+      clientInfoList: [],
+      clientLoading: false,
+      clientQueryParams: {
+        clientName: '',
+        pageNum: 1,
+        pageSize: 100
+      },
+      //客户需求相关信息
+      demandInfoList: [],
+      demandLoading: false,
+      demandQueryParams: {
+        demandName: '',
+        pageNum: 1,
+        pageSize: 100
+      },
+
       baseUrl: process.env.VUE_APP_BASE_API,
       //表格展示列
       columns: [
-        { key: 0, label: '编号', visible: true },
-          { key: 1, label: '客户', visible: true },
-          { key: 2, label: '需求', visible: true },
-          { key: 3, label: '总金额', visible: true },
-          { key: 4, label: '支付状态', visible: true },
-          { key: 5, label: '合同附件', visible: true },
-          { key: 6, label: '销售员', visible: true },
-          { key: 7, label: '部门', visible: true },
-          { key: 8, label: '创建时间', visible: true },
-          { key: 9, label: '更新人', visible: true },
-          { key: 10, label: '更新时间', visible: true },
-          { key: 11, label: '备注', visible: true },
-        ],
+        { key: 0, label: '编号', visible: false },
+        { key: 1, label: '客户', visible: true },
+        { key: 2, label: '需求', visible: true },
+        { key: 3, label: '总金额', visible: true },
+        { key: 4, label: '支付状态', visible: true },
+        { key: 5, label: '合同附件', visible: true },
+        { key: 6, label: '销售员', visible: true },
+        { key: 7, label: '部门', visible: false },
+        { key: 8, label: '创建时间', visible: true },
+        { key: 9, label: '更新人', visible: false },
+        { key: 10, label: '更新时间', visible: false },
+        { key: 11, label: '备注', visible: false }
+      ],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -279,7 +384,7 @@ export default {
       // 客户交易表格数据
       clientDealInfoList: [],
       // 弹出层标题
-      title: "",
+      title: '',
       // 是否显示弹出层
       open: false,
       // 备注时间范围
@@ -298,74 +403,179 @@ export default {
         deptId: null,
         createTime: null,
         updateBy: null,
-        updateTime: null,
+        updateTime: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
         clientId: [
-          { required: true, message: "客户不能为空", trigger: "blur" }
+          { required: true, message: '客户不能为空', trigger: 'blur' }
         ],
         demandId: [
-          { required: true, message: "需求不能为空", trigger: "blur" }
+          { required: true, message: '需求不能为空', trigger: 'blur' }
         ],
         totalPrice: [
-          { required: true, message: "总金额不能为空", trigger: "blur" }
+          { required: true, message: '总金额不能为空', trigger: 'blur' }
         ],
         payStatus: [
-          { required: true, message: "支付状态不能为空", trigger: "change" }
+          { required: true, message: '支付状态不能为空', trigger: 'change' }
         ],
         contractFile: [
-          { required: true, message: "合同附件不能为空", trigger: "blur" }
+          { required: true, message: '合同附件不能为空', trigger: 'blur' }
         ],
         userId: [
-          { required: true, message: "销售员不能为空", trigger: "blur" }
+          { required: true, message: '销售员不能为空', trigger: 'blur' }
         ],
         deptId: [
-          { required: true, message: "部门不能为空", trigger: "blur" }
+          { required: true, message: '部门不能为空', trigger: 'blur' }
         ],
         createTime: [
-          { required: true, message: "创建时间不能为空", trigger: "blur" }
-        ],
+          { required: true, message: '创建时间不能为空', trigger: 'blur' }
+        ]
       }
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
+    this.getDemandInfoList()
+    this.getSalesUserInfoList()
+    this.getClientInfoList()
   },
   methods: {
+    /**
+     * 获取客户需求列表推荐
+     * @param query
+     */
+    selectDemandInfoList(query) {
+      if (query !== '') {
+        this.demandLoading = true
+        this.demandQueryParams.demandName = query
+        setTimeout(() => {
+          this.getDemandInfoList()
+        }, 200)
+      } else {
+        this.demandInfoList = []
+        this.demandQueryParams.userName = null
+      }
+    },
+    /**
+     * 获取客户需求信息列表
+     */
+    getDemandInfoList() {
+      //添加查询参数
+      if (this.form.clientId != null) {
+        this.demandQueryParams.id = this.form.userId
+      } else {
+        this.demandQueryParams.id = null
+      }
+      if (this.demandQueryParams.demandName !== '') {
+        this.demandQueryParams.id = null
+      }
+      listClientDemandInfo(this.demandQueryParams).then(res => {
+        this.demandInfoList = res?.rows
+        this.demandLoading = false
+      })
+    },
+    /**
+     * 获取客户列表推荐
+     * @param query
+     */
+    selectClientInfoList(query) {
+      if (query !== '') {
+        this.clientLoading = true
+        this.clientQueryParams.clientName = query
+        setTimeout(() => {
+          this.getClientInfoList()
+        }, 200)
+      } else {
+        this.clientInfoList = []
+        this.clientQueryParams.userName = null
+      }
+    },
+    /**
+     * 获取客户信息列表
+     */
+    getClientInfoList() {
+      //添加查询参数
+      if (this.form.clientId != null) {
+        this.clientQueryParams.id = this.form.userId
+      } else {
+        this.clientQueryParams.id = null
+      }
+      if (this.clientQueryParams.clientName !== '') {
+        this.clientQueryParams.id = null
+      }
+      listClientInfo(this.clientQueryParams).then(res => {
+        this.clientInfoList = res?.rows
+        this.clientLoading = false
+      })
+    },
+    /**
+     * 获取销售用户列表推荐
+     * @param query
+     */
+    selectSalesUserInfoList(query) {
+      if (query !== '') {
+        this.salesUserLoading = true
+        this.salesUserQueryParams.userName = query
+        setTimeout(() => {
+          this.getSalesUserInfoList()
+        }, 200)
+      } else {
+        this.salesUserInfoList = []
+        this.salesUserQueryParams.userName = null
+      }
+    },
+    /**
+     * 获取销售用户信息列表
+     */
+    getSalesUserInfoList() {
+      //添加查询参数
+      if (this.form.userId != null) {
+        this.salesUserQueryParams.userId = this.form.userId
+      } else {
+        this.salesUserQueryParams.userId = null
+      }
+      if (this.salesUserQueryParams.userName !== '') {
+        this.salesUserQueryParams.userId = null
+      }
+      allocatedUserList(this.salesUserQueryParams).then(res => {
+        this.salesUserInfoList = res?.rows
+        this.salesUserLoading = false
+      })
+    },
     /** 查询客户交易列表 */
     getList() {
-      this.loading = true;
-      this.queryParams.params = {};
+      this.loading = true
+      this.queryParams.params = {}
       if (null != this.daterangeCreateTime && '' != this.daterangeCreateTime) {
-        this.queryParams.params["beginCreateTime"] = this.daterangeCreateTime[0];
-        this.queryParams.params["endCreateTime"] = this.daterangeCreateTime[1];
+        this.queryParams.params['beginCreateTime'] = this.daterangeCreateTime[0]
+        this.queryParams.params['endCreateTime'] = this.daterangeCreateTime[1]
       }
       if (null != this.daterangeUpdateTime && '' != this.daterangeUpdateTime) {
-        this.queryParams.params["beginUpdateTime"] = this.daterangeUpdateTime[0];
-        this.queryParams.params["endUpdateTime"] = this.daterangeUpdateTime[1];
+        this.queryParams.params['beginUpdateTime'] = this.daterangeUpdateTime[0]
+        this.queryParams.params['endUpdateTime'] = this.daterangeUpdateTime[1]
       }
       listClientDealInfo(this.queryParams).then(response => {
-        this.clientDealInfoList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+        this.clientDealInfoList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
     },
-      //获取文件名 此功能只可以下载只有一个文件的
-      getFileName(filePath) {
-        if (filePath == null) {
-          return
-        }
-        // 提取文件名或根据需求生成文件名
-        const fileName = filePath.substring(filePath.lastIndexOf('/') + 1)
-        return fileName
-      },
+    //获取文件名 此功能只可以下载只有一个文件的
+    getFileName(filePath) {
+      if (filePath == null) {
+        return
+      }
+      // 提取文件名或根据需求生成文件名
+      const fileName = filePath.substring(filePath.lastIndexOf('/') + 1)
+      return fileName
+    },
     // 取消按钮
     cancel() {
-      this.open = false;
-      this.reset();
+      this.open = false
+      this.reset()
     },
     // 表单重置
     reset() {
@@ -382,72 +592,73 @@ export default {
         updateBy: null,
         updateTime: null,
         remark: null
-      };
-      this.resetForm("form");
+      }
+      this.resetForm('form')
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      this.queryParams.pageNum = 1
+      this.getList()
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.daterangeCreateTime = [];
-      this.daterangeUpdateTime = [];
-      this.resetForm("queryForm");
-      this.handleQuery();
+      this.daterangeCreateTime = []
+      this.daterangeUpdateTime = []
+      this.resetForm('queryForm')
+      this.handleQuery()
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加客户交易";
+      this.reset()
+      this.open = true
+      this.title = '添加客户交易'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset();
+      this.reset()
       const id = row.id || this.ids
       getClientDealInfo(id).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改客户交易";
-      });
+        this.form = response.data
+        this.open = true
+        this.title = '修改客户交易'
+      })
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
             updateClientDealInfo(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
+              this.$modal.msgSuccess('修改成功')
+              this.open = false
+              this.getList()
+            })
           } else {
             addClientDealInfo(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
+              this.$modal.msgSuccess('新增成功')
+              this.open = false
+              this.getList()
+            })
           }
         }
-      });
+      })
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
+      const ids = row.id || this.ids
       this.$modal.confirm('是否确认删除客户交易编号为"' + ids + '"的数据项？').then(function() {
-        return delClientDealInfo(ids);
+        return delClientDealInfo(ids)
       }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+        this.getList()
+        this.$modal.msgSuccess('删除成功')
+      }).catch(() => {
+      })
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -456,5 +667,5 @@ export default {
       }, `clientDealInfo_${new Date().getTime()}.xlsx`)
     }
   }
-};
+}
 </script>

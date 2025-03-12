@@ -20,6 +20,7 @@ import com.lz.common.utils.DateUtils;
 import javax.annotation.Resource;
 
 import com.lz.manage.model.domain.ClientInfo;
+import com.lz.manage.model.enums.DemandStatusEnum;
 import com.lz.manage.service.IClientInfoService;
 import com.lz.system.service.ISysDeptService;
 import com.lz.system.service.ISysUserService;
@@ -99,7 +100,7 @@ public class ClientDemandInfoServiceImpl extends ServiceImpl<ClientDemandInfoMap
      */
     @Override
     public int insertClientDemandInfo(ClientDemandInfo clientDemandInfo) {
-        clientDemandInfo.setDemandStatus();
+        clientDemandInfo.setDemandStatus(DemandStatusEnum.DEMAND_STATUS_0.getValue());
         checkClientDemandInfo(clientDemandInfo);
         clientDemandInfo.setCreateTime(DateUtils.getNowDate());
         return clientDemandInfoMapper.insertClientDemandInfo(clientDemandInfo);
@@ -125,6 +126,10 @@ public class ClientDemandInfoServiceImpl extends ServiceImpl<ClientDemandInfoMap
      */
     @Override
     public int updateClientDemandInfo(ClientDemandInfo clientDemandInfo) {
+//        ClientDemandInfo old = clientDemandInfoMapper.selectClientDemandInfoById(clientDemandInfo.getId());
+//        if (old.getDemandStatus().equals(DemandStatusEnum.DEMAND_STATUS_2.getValue())) {
+//            throw new ServiceException("该需求已完成，不能修改");
+//        }
         checkClientDemandInfo(clientDemandInfo);
         clientDemandInfo.setUpdateTime(DateUtils.getNowDate());
         return clientDemandInfoMapper.updateClientDemandInfo(clientDemandInfo);
