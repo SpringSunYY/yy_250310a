@@ -200,26 +200,31 @@
           <dict-tag :options="dict.type.task_status" :value="scope.row.taskStatus"/>
         </template>
       </el-table-column>
-      <el-table-column label="装修人员" :show-overflow-tooltip="true" align="center" v-if="columns[6].visible"
+      <el-table-column label="凭证" align="center" v-if="columns[6].visible" prop="progressImage" width="100">
+        <template slot-scope="scope">
+          <image-preview :src="scope.row.progressImage" :width="50" :height="50"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="装修人员" :show-overflow-tooltip="true" align="center" v-if="columns[7].visible"
                        prop="userName"
       />
-      <el-table-column label="部门" :show-overflow-tooltip="true" align="center" v-if="columns[7].visible"
+      <el-table-column label="部门" :show-overflow-tooltip="true" align="center" v-if="columns[8].visible"
                        prop="deptName"
       />
-      <el-table-column label="创建时间" align="center" v-if="columns[8].visible" prop="createTime" width="180">
+      <el-table-column label="创建时间" align="center" v-if="columns[9].visible" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新人" :show-overflow-tooltip="true" align="center" v-if="columns[9].visible"
+      <el-table-column label="更新人" :show-overflow-tooltip="true" align="center" v-if="columns[10].visible"
                        prop="updateBy"
       />
-      <el-table-column label="更新时间" align="center" v-if="columns[10].visible" prop="updateTime" width="180">
+      <el-table-column label="更新时间" align="center" v-if="columns[11].visible" prop="updateTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" :show-overflow-tooltip="true" align="center" v-if="columns[11].visible"
+      <el-table-column label="备注" :show-overflow-tooltip="true" align="center" v-if="columns[12].visible"
                        prop="remark"
       />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -282,6 +287,9 @@
         </el-form-item>
         <el-form-item label="进度描述" prop="progress">
           <el-input v-model="form.progress" placeholder="请输入进度描述"/>
+        </el-form-item>
+        <el-form-item label="凭证" prop="progressImage">
+          <image-upload v-model="form.progressImage"/>
         </el-form-item>
         <el-form-item label="任务状态" prop="taskStatus">
           <el-radio-group v-model="form.taskStatus">
@@ -361,12 +369,13 @@ export default {
         { key: 3, label: '任务', visible: true },
         { key: 4, label: '进度描述', visible: true },
         { key: 5, label: '任务状态', visible: true },
-        { key: 6, label: '装修人员', visible: true },
-        { key: 7, label: '部门', visible: false },
-        { key: 8, label: '创建时间', visible: true },
-        { key: 9, label: '更新人', visible: false },
-        { key: 10, label: '更新时间', visible: false },
-        { key: 11, label: '备注', visible: false }
+        { key: 6, label: '凭证', visible: true },
+        { key: 7, label: '装修人员', visible: true },
+        { key: 8, label: '部门', visible: false },
+        { key: 9, label: '创建时间', visible: true },
+        { key: 10, label: '更新人', visible: false },
+        { key: 11, label: '更新时间', visible: false },
+        { key: 12, label: '备注', visible: false }
       ],
       // 遮罩层
       loading: true,

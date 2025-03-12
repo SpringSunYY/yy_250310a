@@ -61,6 +61,9 @@ public class TaskProgressInfoVo implements Serializable
     /** 备注 */
     private String remark;
 
+    /** 凭证 */
+    private String progressImage;
+
 
      /**
      * 对象转封装类

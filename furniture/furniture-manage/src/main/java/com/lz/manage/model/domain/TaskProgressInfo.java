@@ -82,6 +82,9 @@ public class TaskProgressInfo implements Serializable
     @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updateTime;
 
+    /** 凭证 */
+    private String progressImage;
+
     /** 备注 */
     @Excel(name = "备注")
     private String remark;

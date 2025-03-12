@@ -29,6 +29,9 @@ public class TaskProgressInfoInsert implements Serializable
     /** 任务 */
     private Long taskId;
 
+    /** 凭证 */
+    private String progressImage;
+
     /** 进度描述 */
     private String progress;
 
