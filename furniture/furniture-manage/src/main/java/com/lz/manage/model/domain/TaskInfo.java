@@ -33,10 +33,14 @@ public class TaskInfo implements Serializable
 
     /** 客户 */
     @Excel(name = "客户")
+    @TableField(exist = false)
+    private String clientName;
     private Long clientId;
 
     /** 需求 */
     @Excel(name = "需求")
+    @TableField(exist = false)
+    private String demandName;
     private Long demandId;
 
     /** 任务名称 */
@@ -53,10 +57,14 @@ public class TaskInfo implements Serializable
 
     /** 装修人员 */
     @Excel(name = "装修人员")
+    @TableField(exist = false)
+    private String userName;
     private Long userId;
 
     /** 部门 */
     @Excel(name = "部门")
+    @TableField(exist = false)
+    private String deptName;
     private Long deptId;
 
     /** 创建时间 */
