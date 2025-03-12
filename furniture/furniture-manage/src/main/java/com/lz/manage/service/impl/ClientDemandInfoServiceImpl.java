@@ -99,6 +99,7 @@ public class ClientDemandInfoServiceImpl extends ServiceImpl<ClientDemandInfoMap
      */
     @Override
     public int insertClientDemandInfo(ClientDemandInfo clientDemandInfo) {
+        clientDemandInfo.setDemandStatus();
         checkClientDemandInfo(clientDemandInfo);
         clientDemandInfo.setCreateTime(DateUtils.getNowDate());
         return clientDemandInfoMapper.insertClientDemandInfo(clientDemandInfo);
