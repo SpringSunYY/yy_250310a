@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.lz.common.core.domain.entity.SysDept;
 import com.lz.common.core.domain.entity.SysUser;
 import com.lz.common.exception.ServiceException;
@@ -20,8 +21,10 @@ import com.lz.common.utils.DateUtils;
 
 import javax.annotation.Resource;
 
+import com.lz.manage.mapper.TaskProgressInfoMapper;
 import com.lz.manage.model.domain.ClientDemandInfo;
 import com.lz.manage.model.domain.ClientInfo;
+import com.lz.manage.model.domain.TaskProgressInfo;
 import com.lz.manage.model.enums.DemandStatusEnum;
 import com.lz.manage.model.enums.TaskStatusEnum;
 import com.lz.manage.service.IClientDemandInfoService;
@@ -59,6 +62,9 @@ public class TaskInfoServiceImpl extends ServiceImpl<TaskInfoMapper, TaskInfo> i
 
     @Resource
     private IClientDemandInfoService demandInfoService;
+
+    @Resource
+    private TaskProgressInfoMapper progressInfoMapper;
 
     //region mybatis代码
 
@@ -155,6 +161,11 @@ public class TaskInfoServiceImpl extends ServiceImpl<TaskInfoMapper, TaskInfo> i
      */
     @Override
     public int deleteTaskInfoByIds(Long[] ids) {
+        //查询是否旗下有进度
+        List<TaskProgressInfo> taskProgressInfos = progressInfoMapper.selectList(new LambdaQueryWrapper<TaskProgressInfo>().in(TaskProgressInfo::getTaskId,  ids));
+        if (StringUtils.isNotEmpty(taskProgressInfos)) {
+            throw new ServiceException("该任务下有进度，不能删除");
+        }
         return taskInfoMapper.deleteTaskInfoByIds(ids);
     }
 

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import com.lz.common.core.domain.entity.SysUser;
+import com.lz.common.exception.ServiceException;
 import com.lz.common.utils.SecurityUtils;
 import com.lz.common.utils.StringUtils;
 
@@ -106,7 +107,11 @@ public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientI
      */
     @Override
     public int deleteClientInfoByIds(Long[] ids) {
-        return clientInfoMapper.deleteClientInfoByIds(ids);
+        try {
+            return clientInfoMapper.deleteClientInfoByIds(ids);
+        } catch (Exception e) {
+            throw new ServiceException("请先删除与客户有关联的所有信息");
+        }
     }
 
     /**

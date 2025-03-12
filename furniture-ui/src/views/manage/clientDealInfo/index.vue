@@ -456,7 +456,7 @@ export default {
         }, 200)
       } else {
         this.demandInfoList = []
-        this.demandQueryParams.userName = null
+        this.demandQueryParams.demandName = null
       }
     },
     /**

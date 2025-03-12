@@ -174,7 +174,11 @@ public class ClientDealInfoServiceImpl extends ServiceImpl<ClientDealInfoMapper,
      */
     @Override
     public int deleteClientDealInfoByIds(Long[] ids) {
-        return clientDealInfoMapper.deleteClientDealInfoByIds(ids);
+        try {
+            return clientDealInfoMapper.deleteClientDealInfoByIds(ids);
+        } catch (Exception e) {
+            throw new ServiceException("请先删除与交易有关的信息");
+        }
     }
 
     /**

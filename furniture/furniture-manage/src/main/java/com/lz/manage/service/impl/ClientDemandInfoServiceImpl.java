@@ -143,7 +143,11 @@ public class ClientDemandInfoServiceImpl extends ServiceImpl<ClientDemandInfoMap
      */
     @Override
     public int deleteClientDemandInfoByIds(Long[] ids) {
-        return clientDemandInfoMapper.deleteClientDemandInfoByIds(ids);
+        try {
+            return clientDemandInfoMapper.deleteClientDemandInfoByIds(ids);
+        } catch (Exception e) {
+            throw new ServiceException("请先删除与需求有关联的所有信息");
+        }
     }
 
     /**

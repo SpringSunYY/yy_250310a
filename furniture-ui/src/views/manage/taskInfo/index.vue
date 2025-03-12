@@ -318,7 +318,7 @@ export default {
   dicts: ['task_status'],
   data() {
     return {
-      //销售相关信息
+      //装修相关信息
       furnishUserInfoList: [],
       furnishUserLoading: false,
       furnishUserQueryParams: {
@@ -471,7 +471,7 @@ export default {
         }, 200)
       } else {
         this.demandInfoList = []
-        this.demandQueryParams.userName = null
+        this.demandQueryParams.demandName = null
       }
     },
     /**
