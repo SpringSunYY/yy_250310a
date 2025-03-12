@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lz.common.annotation.DataScope;
 import com.lz.common.core.domain.entity.SysDept;
 import com.lz.common.core.domain.entity.SysUser;
 import com.lz.common.exception.ServiceException;
@@ -86,6 +87,7 @@ public class TaskInfoServiceImpl extends ServiceImpl<TaskInfoMapper, TaskInfo> i
      * @return 任务信息
      */
     @Override
+    @DataScope(userAlias = "tb_task_info",deptAlias = "tb_task_info")
     public List<TaskInfo> selectTaskInfoList(TaskInfo taskInfo) {
         List<TaskInfo> taskInfos = taskInfoMapper.selectTaskInfoList(taskInfo);
         for (TaskInfo info : taskInfos) {

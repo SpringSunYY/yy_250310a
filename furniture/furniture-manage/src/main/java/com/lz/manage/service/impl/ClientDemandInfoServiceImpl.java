@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import com.lz.common.annotation.DataScope;
 import com.lz.common.core.domain.entity.SysDept;
 import com.lz.common.core.domain.entity.SysUser;
 import com.lz.common.exception.ServiceException;
@@ -72,6 +73,7 @@ public class ClientDemandInfoServiceImpl extends ServiceImpl<ClientDemandInfoMap
      * @param clientDemandInfo 客户需求
      * @return 客户需求
      */
+    @DataScope(userAlias = "tb_client_demand_info",deptAlias = "tb_client_demand_info")
     @Override
     public List<ClientDemandInfo> selectClientDemandInfoList(ClientDemandInfo clientDemandInfo) {
         List<ClientDemandInfo> clientDemandInfos = clientDemandInfoMapper.selectClientDemandInfoList(clientDemandInfo);

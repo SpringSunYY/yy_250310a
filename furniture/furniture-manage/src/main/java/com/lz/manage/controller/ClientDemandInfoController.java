@@ -42,7 +42,7 @@ public class ClientDemandInfoController extends BaseController
     /**
      * 查询客户需求列表
      */
-    @PreAuthorize("@ss.hasPermi('manage:clientDemandInfo:list')")
+    @PreAuthorize("@ss.hasAnyPermi('manage:clientDemandInfo:list,manage:clientDemandInfo:query')")
     @GetMapping("/list")
     public TableDataInfo list(ClientDemandInfoQuery clientDemandInfoQuery)
     {

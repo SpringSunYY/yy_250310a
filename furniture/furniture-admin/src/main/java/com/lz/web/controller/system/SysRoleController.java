@@ -192,7 +192,7 @@ public class SysRoleController extends BaseController
     /**
      * 查询已分配用户角色列表
      */
-    @PreAuthorize("@ss.hasPermi('system:role:list')")
+    @PreAuthorize("@ss.hasAnyPermi('system:role:list,system:user:list,system:user:query')")
     @GetMapping("/authUser/allocatedList")
     public TableDataInfo allocatedList(SysUser user)
     {
@@ -204,7 +204,7 @@ public class SysRoleController extends BaseController
     /**
      * 查询未分配用户角色列表
      */
-    @PreAuthorize("@ss.hasPermi('system:role:list,system:user:list,system:user:query')")
+    @PreAuthorize("@ss.hasAnyPermi('system:role:list,system:user:list,system:user:query')")
     @GetMapping("/authUser/unallocatedList")
     public TableDataInfo unallocatedList(SysUser user)
     {

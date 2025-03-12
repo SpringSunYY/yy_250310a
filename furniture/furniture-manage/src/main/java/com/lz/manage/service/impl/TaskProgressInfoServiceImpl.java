@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import com.lz.common.annotation.DataScope;
 import com.lz.common.core.domain.entity.SysDept;
 import com.lz.common.core.domain.entity.SysUser;
 import com.lz.common.exception.ServiceException;
@@ -84,6 +85,7 @@ public class TaskProgressInfoServiceImpl extends ServiceImpl<TaskProgressInfoMap
      * @return 任务进度
      */
     @Override
+    @DataScope(userAlias = "tb_task_progress_info",deptAlias = "tb_task_progress_info")
     public List<TaskProgressInfo> selectTaskProgressInfoList(TaskProgressInfo taskProgressInfo) {
         List<TaskProgressInfo> taskProgressInfos = taskProgressInfoMapper.selectTaskProgressInfoList(taskProgressInfo);
         for (TaskProgressInfo info : taskProgressInfos) {

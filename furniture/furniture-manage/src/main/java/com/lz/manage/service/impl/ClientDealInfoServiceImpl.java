@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.lz.common.annotation.DataScope;
 import com.lz.common.core.domain.entity.SysDept;
 import com.lz.common.core.domain.entity.SysUser;
 import com.lz.common.exception.ServiceException;
@@ -82,6 +83,7 @@ public class ClientDealInfoServiceImpl extends ServiceImpl<ClientDealInfoMapper,
      * @return 客户交易
      */
     @Override
+    @DataScope(userAlias = "tb_client_deal_info",deptAlias = "tb_client_deal_info")
     public List<ClientDealInfo> selectClientDealInfoList(ClientDealInfo clientDealInfo) {
         List<ClientDealInfo> clientDealInfos = clientDealInfoMapper.selectClientDealInfoList(clientDealInfo);
         for (ClientDealInfo info : clientDealInfos) {
