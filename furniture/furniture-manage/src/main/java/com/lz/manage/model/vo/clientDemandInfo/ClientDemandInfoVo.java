@@ -27,6 +27,7 @@ public class ClientDemandInfoVo implements Serializable
 
     /** 客户 */
     @Excel(name = "客户")
+    private String clientName;
     private Long clientId;
 
     /** 需求名称 */
@@ -69,10 +70,12 @@ public class ClientDemandInfoVo implements Serializable
 
     /** 销售员 */
     @Excel(name = "销售员")
+    private String userName;
     private Long userId;
 
     /** 部门 */
     @Excel(name = "部门")
+    private String deptName;
     private Long deptId;
 
     /** 创建时间 */

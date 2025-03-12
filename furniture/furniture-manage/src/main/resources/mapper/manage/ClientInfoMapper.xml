@@ -23,16 +23,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectClientInfoList" parameterType="ClientInfo" resultMap="ClientInfoResult">
         <include refid="selectClientInfoVo"/>
-        <where>  
-            <if test="id != null "> and id = #{id}</if>
-            <if test="clientName != null  and clientName != ''"> and client_name like concat('%', #{clientName}, '%')</if>
-            <if test="phone != null  and phone != ''"> and phone like concat('%', #{phone}, '%')</if>
-            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
-            <if test="clientAddress != null  and clientAddress != ''"> and client_address = #{clientAddress}</if>
-            <if test="userId != null "> and user_id = #{userId}</if>
-            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
-            <if test="updateBy != null  and updateBy != ''"> and update_by like concat('%', #{updateBy}, '%')</if>
-            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="clientName != null  and clientName != ''">and client_name like concat('%', #{clientName}, '%')
+            </if>
+            <if test="phone != null  and phone != ''">and phone like concat('%', #{phone}, '%')</if>
+            <if test="sex != null  and sex != ''">and sex = #{sex}</if>
+            <if test="clientAddress != null  and clientAddress != ''">and client_address = #{clientAddress}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''">
+                and create_time between #{params.beginCreateTime} and #{params.endCreateTime}
+            </if>
+            <if test="updateBy != null  and updateBy != ''">and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''">
+                and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}
+            </if>
         </where>
     </select>
     

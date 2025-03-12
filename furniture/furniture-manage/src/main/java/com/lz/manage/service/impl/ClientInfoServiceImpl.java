@@ -9,9 +9,12 @@ import java.util.stream.Collectors;
 import com.lz.common.core.domain.entity.SysUser;
 import com.lz.common.utils.SecurityUtils;
 import com.lz.common.utils.StringUtils;
+
 import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lz.common.utils.DateUtils;
+
 import javax.annotation.Resource;
 
 import com.lz.system.service.ISysUserService;
@@ -26,13 +29,12 @@ import com.lz.manage.model.vo.clientInfo.ClientInfoVo;
 
 /**
  * 客户信息Service业务层处理
- * 
+ *
  * @author YY
  * @date 2025-03-11
  */
 @Service
-public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientInfo> implements IClientInfoService
-{
+public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientInfo> implements IClientInfoService {
     @Resource
     private ClientInfoMapper clientInfoMapper;
 
@@ -40,27 +42,26 @@ public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientI
     private ISysUserService userService;
 
     //region mybatis代码
+
     /**
      * 查询客户信息
-     * 
+     *
      * @param id 客户信息主键
      * @return 客户信息
      */
     @Override
-    public ClientInfo selectClientInfoById(Long id)
-    {
+    public ClientInfo selectClientInfoById(Long id) {
         return clientInfoMapper.selectClientInfoById(id);
     }
 
     /**
      * 查询客户信息列表
-     * 
+     *
      * @param clientInfo 客户信息
      * @return 客户信息
      */
     @Override
-    public List<ClientInfo> selectClientInfoList(ClientInfo clientInfo)
-    {
+    public List<ClientInfo> selectClientInfoList(ClientInfo clientInfo) {
         List<ClientInfo> clientInfos = clientInfoMapper.selectClientInfoList(clientInfo);
         for (ClientInfo info : clientInfos) {
             SysUser user = userService.selectUserById(info.getUserId());
@@ -73,13 +74,12 @@ public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientI
 
     /**
      * 新增客户信息
-     * 
+     *
      * @param clientInfo 客户信息
      * @return 结果
      */
     @Override
-    public int insertClientInfo(ClientInfo clientInfo)
-    {
+    public int insertClientInfo(ClientInfo clientInfo) {
         clientInfo.setUserId(SecurityUtils.getUserId());
         clientInfo.setCreateTime(DateUtils.getNowDate());
         return clientInfoMapper.insertClientInfo(clientInfo);
@@ -87,13 +87,12 @@ public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientI
 
     /**
      * 修改客户信息
-     * 
+     *
      * @param clientInfo 客户信息
      * @return 结果
      */
     @Override
-    public int updateClientInfo(ClientInfo clientInfo)
-    {
+    public int updateClientInfo(ClientInfo clientInfo) {
         clientInfo.setUpdateBy(SecurityUtils.getUsername());
         clientInfo.setUpdateTime(DateUtils.getNowDate());
         return clientInfoMapper.updateClientInfo(clientInfo);
@@ -101,30 +100,29 @@ public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientI
 
     /**
      * 批量删除客户信息
-     * 
+     *
      * @param ids 需要删除的客户信息主键
      * @return 结果
      */
     @Override
-    public int deleteClientInfoByIds(Long[] ids)
-    {
+    public int deleteClientInfoByIds(Long[] ids) {
         return clientInfoMapper.deleteClientInfoByIds(ids);
     }
 
     /**
      * 删除客户信息信息
-     * 
+     *
      * @param id 客户信息主键
      * @return 结果
      */
     @Override
-    public int deleteClientInfoById(Long id)
-    {
+    public int deleteClientInfoById(Long id) {
         return clientInfoMapper.deleteClientInfoById(id);
     }
+
     //endregion
     @Override
-    public QueryWrapper<ClientInfo> getQueryWrapper(ClientInfoQuery clientInfoQuery){
+    public QueryWrapper<ClientInfo> getQueryWrapper(ClientInfoQuery clientInfoQuery) {
         QueryWrapper<ClientInfo> queryWrapper = new QueryWrapper<>();
         //如果不使用params可以删除
         Map<String, Object> params = clientInfoQuery.getParams();
@@ -132,31 +130,31 @@ public class ClientInfoServiceImpl extends ServiceImpl<ClientInfoMapper, ClientI
             params = new HashMap<>();
         }
         Long id = clientInfoQuery.getId();
-        queryWrapper.eq( StringUtils.isNotNull(id),"id",id);
+        queryWrapper.eq(StringUtils.isNotNull(id), "id", id);
 
         String clientName = clientInfoQuery.getClientName();
-        queryWrapper.like(StringUtils.isNotEmpty(clientName) ,"client_name",clientName);
+        queryWrapper.like(StringUtils.isNotEmpty(clientName), "client_name", clientName);
 
         String phone = clientInfoQuery.getPhone();
-        queryWrapper.like(StringUtils.isNotEmpty(phone) ,"phone",phone);
+        queryWrapper.like(StringUtils.isNotEmpty(phone), "phone", phone);
 
         String sex = clientInfoQuery.getSex();
-        queryWrapper.eq(StringUtils.isNotEmpty(sex) ,"sex",sex);
+        queryWrapper.eq(StringUtils.isNotEmpty(sex), "sex", sex);
 
         String clientAddress = clientInfoQuery.getClientAddress();
-        queryWrapper.eq(StringUtils.isNotEmpty(clientAddress) ,"client_address",clientAddress);
+        queryWrapper.eq(StringUtils.isNotEmpty(clientAddress), "client_address", clientAddress);
 
         Long userId = clientInfoQuery.getUserId();
-        queryWrapper.eq( StringUtils.isNotNull(userId),"user_id",userId);
+        queryWrapper.eq(StringUtils.isNotNull(userId), "user_id", userId);
 
         Date createTime = clientInfoQuery.getCreateTime();
-        queryWrapper.between(StringUtils.isNotNull(params.get("beginCreateTime"))&&StringUtils.isNotNull(params.get("endCreateTime")),"create_time",params.get("beginCreateTime"),params.get("endCreateTime"));
+        queryWrapper.between(StringUtils.isNotNull(params.get("beginCreateTime")) && StringUtils.isNotNull(params.get("endCreateTime")), "create_time", params.get("beginCreateTime"), params.get("endCreateTime"));
 
         String updateBy = clientInfoQuery.getUpdateBy();
-        queryWrapper.like(StringUtils.isNotEmpty(updateBy) ,"update_by",updateBy);
+        queryWrapper.like(StringUtils.isNotEmpty(updateBy), "update_by", updateBy);
 
         Date updateTime = clientInfoQuery.getUpdateTime();
-        queryWrapper.between(StringUtils.isNotNull(params.get("beginUpdateTime"))&&StringUtils.isNotNull(params.get("endUpdateTime")),"update_time",params.get("beginUpdateTime"),params.get("endUpdateTime"));
+        queryWrapper.between(StringUtils.isNotNull(params.get("beginUpdateTime")) && StringUtils.isNotNull(params.get("endUpdateTime")), "update_time", params.get("beginUpdateTime"), params.get("endUpdateTime"));
 
         return queryWrapper;
     }

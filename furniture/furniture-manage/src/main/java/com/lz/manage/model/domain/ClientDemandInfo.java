@@ -33,6 +33,8 @@ public class ClientDemandInfo implements Serializable
 
     /** 客户 */
     @Excel(name = "客户")
+    @TableField(exist = false)
+    private String clientName;
     private Long clientId;
 
     /** 需求名称 */
@@ -75,10 +77,14 @@ public class ClientDemandInfo implements Serializable
 
     /** 销售员 */
     @Excel(name = "销售员")
+    @TableField(exist = false)
+    private String userName;
     private Long userId;
 
     /** 部门 */
     @Excel(name = "部门")
+    @TableField(exist = false)
+    private String deptName;
     private Long deptId;
 
     /** 创建时间 */
