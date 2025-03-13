@@ -32,3 +32,19 @@ export function getDealCount(query) {
     params: query
   })
 }
+
+export function getTaskToday(query) {
+  return request({
+    url: '/manage/statics/getTaskToday',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getDealPriceByDay(query) {
+  return request({
+    url: '/manage/statics/getDealPriceByDay',
+    method: 'get',
+    params: query
+  })
+}

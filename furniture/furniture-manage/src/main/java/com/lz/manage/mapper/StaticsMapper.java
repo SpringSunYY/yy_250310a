@@ -3,8 +3,13 @@ package com.lz.manage.mapper;
 import com.lz.manage.model.domain.ClientDealInfo;
 import com.lz.manage.model.domain.ClientDemandInfo;
 import com.lz.manage.model.domain.TaskInfo;
+import com.lz.manage.model.dto.statics.StaticsBaseDto;
 import com.lz.manage.model.vo.statics.StaticCountPriceVo;
 import com.lz.manage.model.vo.statics.StaticCountVo;
+import com.lz.manage.model.vo.statics.StaticsBaseVo;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Project: furniture
@@ -20,4 +25,9 @@ public interface StaticsMapper {
     StaticCountVo getTaskCount(TaskInfo taskInfo);
 
     StaticCountPriceVo getDealCount(ClientDealInfo clientDealInfo);
+
+    List<StaticsBaseVo<Long>> getTaskByDay(TaskInfo taskInfo);
+
+    List<StaticsBaseVo<BigDecimal>> getDealPriceByDay(StaticsBaseDto staticsBaseDto);
 }
+

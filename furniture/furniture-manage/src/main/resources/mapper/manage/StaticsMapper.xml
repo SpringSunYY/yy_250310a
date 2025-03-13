@@ -64,4 +64,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ${params.dataScope}
         </where>
     </select>
+    <select id="getTaskByDay" resultType="com.lz.manage.model.vo.statics.StaticsBaseVo">
+        select
+        count(id) as value,
+        task_status as name
+        from tb_task_info
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="clientId != null ">and client_id = #{clientId}</if>
+            <if test="demandId != null ">and demand_id = #{demandId}</if>
+            <if test="taskName != null  and taskName != ''">and task_name like concat('%', #{taskName}, '%')</if>
+            <if test="taskStatus != null  and taskStatus != ''">and task_status = #{taskStatus}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="deptId != null ">and dept_id = #{deptId}</if>
+            <if test="createTime != null">
+                and DATE_FORMAT(create_time, '%Y-%m-%d') = DATE_FORMAT(#{createTime}, '%Y-%m-%d')
+            </if>
+            <if test="updateBy != null  and updateBy != ''">and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''">
+                and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}
+            </if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+        group by task_status
+    </select>
+    <select id="getDealPriceByDay" resultType="com.lz.manage.model.vo.statics.StaticsBaseVo">
+        WITH RECURSIVE date_series AS (SELECT DATE (#{startTime}) AS report_date
+        UNION ALL
+        SELECT DATE_ADD(report_date, INTERVAL 1 DAY)
+        FROM date_series
+        WHERE report_date &lt; DATE (#{endTime})
+            )
+        SELECT ds.report_date as name,
+               IFNULL(SUM(t.total_price), 0) AS value
+        FROM date_series ds
+            LEFT JOIN tb_client_deal_info t
+        ON DATE (t.create_time) = ds.report_date
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        GROUP BY ds.report_date
+        ORDER BY ds.report_date;
+    </select>
 </mapper>

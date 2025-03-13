@@ -9,6 +9,7 @@ import com.lz.manage.model.domain.TaskInfo;
 import com.lz.manage.model.dto.clientDealInfo.ClientDealInfoQuery;
 import com.lz.manage.model.dto.clientDemandInfo.ClientDemandInfoQuery;
 import com.lz.manage.model.dto.clientInfo.ClientInfoQuery;
+import com.lz.manage.model.dto.statics.StaticsBaseDto;
 import com.lz.manage.model.dto.taskInfo.TaskInfoQuery;
 import com.lz.manage.service.IStaticsService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * Project: furniture
@@ -58,5 +60,22 @@ public class StaticsController extends BaseController {
     public AjaxResult getDemandCount(ClientDealInfoQuery clientDealInfoQuery) {
         ClientDealInfo clientDealInfo = ClientDealInfoQuery.queryToObj(clientDealInfoQuery);
         return success(staticsService.getDealCount(clientDealInfo));
+    }
+
+    @PreAuthorize("@ss.hasPermi('manage:statics:statics')")
+    @GetMapping("/getTaskToday")
+    public AjaxResult getTaskToday(TaskInfoQuery taskInfoQuery) {
+        TaskInfo taskInfo = TaskInfoQuery.queryToObj(taskInfoQuery);
+        taskInfo.setCreateTime(new Date());
+        return success(staticsService.getTaskByDay(taskInfo));
+    }
+
+    @PreAuthorize("@ss.hasPermi('manage:statics:statics')")
+    @GetMapping("/getDealPriceByDay")
+    public AjaxResult getDealPriceByDay(StaticsBaseDto staticsBaseDto) {
+        staticsBaseDto.setEndTime(new Date());
+        //开始时间七天前
+        staticsBaseDto.setStartTime(new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000));
+        return success(staticsService.getDealPriceByDay(staticsBaseDto));
     }
 }

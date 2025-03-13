@@ -4,8 +4,14 @@ import com.lz.manage.model.domain.ClientDealInfo;
 import com.lz.manage.model.domain.ClientDemandInfo;
 import com.lz.manage.model.domain.ClientInfo;
 import com.lz.manage.model.domain.TaskInfo;
+import com.lz.manage.model.dto.statics.StaticsBaseDto;
 import com.lz.manage.model.vo.statics.StaticCountPriceVo;
 import com.lz.manage.model.vo.statics.StaticCountVo;
+import com.lz.manage.model.vo.statics.StaticsBaseVo;
+import com.lz.manage.model.vo.statics.StaticsPieVo;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Project: furniture
@@ -58,4 +64,26 @@ public interface IStaticsService {
      * return: com.lz.manage.model.vo.statics.StaticCountPriceVo
      **/
     StaticCountPriceVo getDealCount(ClientDealInfo clientDealInfo);
+
+    /**
+     * description: 统计日的任务总数 每种类型
+     * author: YY
+     * method: getTaskToday
+     * date: 2025/3/13 10:35
+     * param:
+     * param: taskInfo
+     * return: com.lz.manage.model.vo.statics.StaticsBaseVo<java.lang.Long>
+     **/
+    List<StaticsBaseVo<Long>> getTaskByDay(TaskInfo taskInfo);
+
+    /**
+     * description: 获取需求每日价格
+     * author: YY
+     * method: getDealPriceByDay
+     * date: 2025/3/13 10:55
+     * param:
+     * param: clientDealInfo
+     * return: com.lz.manage.model.vo.statics.StaticsPieVo<java.math.BigDecimal>
+     **/
+    StaticsPieVo<BigDecimal> getDealPriceByDay(StaticsBaseDto staticsBaseDto);
 }

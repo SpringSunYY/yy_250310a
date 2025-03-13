@@ -1,9 +1,10 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+  <div :class="className" :style="{height:height,width:width}"/>
 </template>
 
 <script>
 import * as echarts from 'echarts'
+
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
@@ -21,6 +22,24 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    chartName: {
+      type: String,
+      default: '饼图',
+      required: true
+    },
+    chartData: {
+      type: Array,
+      default: () => [
+        {
+          name: 'YY',
+          value: 100
+        },{
+          name: 'XC',
+          value: 100
+        }
+      ],
+      require: true
     }
   },
   data() {
@@ -40,34 +59,57 @@ export default {
     this.chart.dispose()
     this.chart = null
   },
+  watch: {
+    chartData: {
+      deep: true,
+      handler(val) {
+        this.initChart(val)
+      }
+    }
+  },
   methods: {
     initChart() {
+      if (this.chart) {
+        this.chart.dispose() // 销毁旧实例
+        this.chart = null
+      }
       this.chart = echarts.init(this.$el, 'macarons')
-
       this.chart.setOption({
+        title: {
+          text: this.chartName,
+          textStyle: {
+            fontSize: 16,
+            color: '#2e95f3'
+          },
+          top: '5%',
+          left: '2%'
+        },
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
           left: 'center',
-          bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          bottom: '10'
+          // data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: this.chartName,
             type: 'pie',
             roseType: 'radius',
+            top: '10%',
             radius: [15, 95],
             center: ['50%', '38%'],
-            data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
+            label: {
+              //悬浮提示文字
+              formatter: '{b}',
+              textStyle: {
+                fontSize: 14,
+                color: '#2e95f3'
+              }
+            },
+            data: this.chartData,
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           }

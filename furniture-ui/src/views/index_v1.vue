@@ -66,23 +66,18 @@
     </el-row>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData"/>
+      <line-chart-component :chart-name="'任务总数'"/>
     </el-row>
 
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <raddar-chart/>
+          <pie-chart :chart-data="taskTodayData" chart-name="今日任务"/>
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <pie-chart/>
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <bar-chart/>
+          <my-only-bar-chart :bar-data="dealPriceByDay" chart-name="交易额"></my-only-bar-chart>
         </div>
       </el-col>
     </el-row>
@@ -98,7 +93,16 @@ import RaddarChart from './dashboard/RaddarChart'
 import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
 import CountTo from 'vue-count-to'
-import { getClientCount, getDealCount, getDemandCount, getTaskCount } from '@/api/manage/statics'
+import {
+  getClientCount,
+  getDealCount,
+  getDealPriceByDay,
+  getDemandCount,
+  getTaskCount,
+  getTaskToday
+} from '@/api/manage/statics'
+import LineChartComponent from '@/views/dashboard/LineChartComponent.vue'
+import MyOnlyBarChart from '@/views/dashboard/MyOnlyBarChart.vue'
 
 const lineChartData = {
   newVisitis: {
@@ -122,6 +126,8 @@ const lineChartData = {
 export default {
   name: 'Index',
   components: {
+    MyOnlyBarChart,
+    LineChartComponent,
     CountTo,
     PanelGroup,
     LineChart,
@@ -135,7 +141,9 @@ export default {
       clientCount: 0,
       taskCount: 0,
       demandCount: 0,
-      dealCount: 0
+      dealCount: 0,
+      taskTodayData: [],
+      dealPriceByDay: {}
     }
   },
   created() {
@@ -143,6 +151,8 @@ export default {
     this.getClientCountInfo()
     this.getDemandCountInfo()
     this.getDealCountInfo()
+    this.getTaskTodayDataInfo()
+    this.getDealPriceByDayInfo()
   },
   methods: {
     getTaskCountInfo() {
@@ -163,6 +173,16 @@ export default {
     getDealCountInfo() {
       getDealCount().then(response => {
         this.dealCount = response.data.count
+      })
+    },
+    getTaskTodayDataInfo() {
+      getTaskToday().then(response => {
+        this.taskTodayData = response.data
+      })
+    },
+    getDealPriceByDayInfo() {
+      getDealPriceByDay().then(response => {
+        this.dealPriceByDay = response.data
       })
     },
     handleSetLineChartData(type) {
