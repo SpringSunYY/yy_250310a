@@ -64,6 +64,7 @@ public class StaticsServiceImpl implements IStaticsService {
         return staticsMapper.getTaskCount(taskInfo);
     }
 
+    @DataScope(userAlias = "tb_client_deal_info",deptAlias = "tb_client_deal_info")
     @Override
     public StaticCountPriceVo getDealCount(ClientDealInfo clientDealInfo) {
         return staticsMapper.getDealCount(clientDealInfo);
@@ -79,6 +80,7 @@ public class StaticsServiceImpl implements IStaticsService {
         return list;
     }
 
+    @DataScope(userAlias = "t", deptAlias = "t")
     @Override
     public StaticsPieVo<BigDecimal> getDealPriceByDay(StaticsBaseDto staticsBaseDto) {
         List<StaticsBaseVo<BigDecimal>> list = staticsMapper.getDealPriceByDay(staticsBaseDto);

@@ -1,5 +1,6 @@
 package com.lz.manage.mapper;
 
+import com.lz.common.annotation.DataScope;
 import com.lz.manage.model.domain.ClientDealInfo;
 import com.lz.manage.model.domain.ClientDemandInfo;
 import com.lz.manage.model.domain.TaskInfo;
@@ -30,8 +31,10 @@ public interface StaticsMapper {
 
     List<StaticsBaseVo<BigDecimal>> getDealPriceByDay(StaticsBaseDto staticsBaseDto);
 
+    @DataScope(userAlias = "t", deptAlias = "t")
     List<StaticsBaseVo<Long>> getDealCountByDay(StaticsBaseDto staticsBaseDto);
 
+    @DataScope(userAlias = "t", deptAlias = "t")
     List<StaticsBaseVo<Long>> getDemandCountByDay(StaticsBaseDto staticsBaseDto);
 }
 

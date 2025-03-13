@@ -2,86 +2,88 @@
   <div class="dashboard-editor-container home">
 
     <div style="margin-top: 10px"></div>
-    <el-row :gutter="40" class="panel-group">
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel">
-          <div class="card-panel-icon-wrapper icon-people">
-            <svg-icon icon-class="count" class-name="card-panel-icon"/>
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              任务总数
+    <div v-if="checkPermi(['manage:statics:statics'])">
+      <el-row :gutter="40" class="panel-group">
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel">
+            <div class="card-panel-icon-wrapper icon-people">
+              <svg-icon icon-class="count" class-name="card-panel-icon"/>
             </div>
-            <count-to :start-val="0" :end-val="Number(taskCount)" :duration="2600"
-                      class="card-panel-num"
-            />
-          </div>
-        </div>
-      </el-col>
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel">
-          <div class="card-panel-icon-wrapper icon-message">
-            <svg-icon icon-class="peoples" class-name="card-panel-icon"/>
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              客户总数
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                任务总数
+              </div>
+              <count-to :start-val="0" :end-val="Number(taskCount)" :duration="2600"
+                        class="card-panel-num"
+              />
             </div>
-            <count-to :start-val="0" :end-val="Number(clientCount)" :duration="3000"
-                      class="card-panel-num"
-            />
           </div>
-        </div>
-      </el-col>
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel">
-          <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon icon-class="money" class-name="card-panel-icon"/>
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              交易总额
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel">
+            <div class="card-panel-icon-wrapper icon-message">
+              <svg-icon icon-class="peoples" class-name="card-panel-icon"/>
             </div>
-            <count-to :start-val="0" :end-val="Number(dealCount)" :duration="3200"
-                      class="card-panel-num"
-            />
-          </div>
-        </div>
-      </el-col>
-      <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-        <div class="card-panel">
-          <div class="card-panel-icon-wrapper icon-shopping">
-            <svg-icon icon-class="shopping" class-name="card-panel-icon"/>
-          </div>
-          <div class="card-panel-description">
-            <div class="card-panel-text">
-              需求总数
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                客户总数
+              </div>
+              <count-to :start-val="0" :end-val="Number(clientCount)" :duration="3000"
+                        class="card-panel-num"
+              />
             </div>
-            <count-to :start-val="0" :end-val="Number(demandCount)" :duration="3600"
-                      class="card-panel-num"
-            />
           </div>
-        </div>
-      </el-col>
-    </el-row>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel">
+            <div class="card-panel-icon-wrapper icon-money">
+              <svg-icon icon-class="money" class-name="card-panel-icon"/>
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                交易总额
+              </div>
+              <count-to :start-val="0" :end-val="Number(dealCount)" :duration="3200"
+                        class="card-panel-num"
+              />
+            </div>
+          </div>
+        </el-col>
+        <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+          <div class="card-panel">
+            <div class="card-panel-icon-wrapper icon-shopping">
+              <svg-icon icon-class="shopping" class-name="card-panel-icon"/>
+            </div>
+            <div class="card-panel-description">
+              <div class="card-panel-text">
+                需求总数
+              </div>
+              <count-to :start-val="0" :end-val="Number(demandCount)" :duration="3600"
+                        class="card-panel-num"
+              />
+            </div>
+          </div>
+        </el-col>
+      </el-row>
 
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart-component :chart-data="dealAndDemandInfo" :chart-name="'需求和交易'"/>
-    </el-row>
+      <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+        <line-chart-component :chart-data="dealAndDemandInfo" :chart-name="'需求和交易'"/>
+      </el-row>
 
-    <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="12">
-        <div class="chart-wrapper">
-          <pie-chart :chart-data="taskTodayData" chart-name="今日任务"/>
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="12">
-        <div class="chart-wrapper">
-          <my-only-bar-chart :bar-data="dealPriceByDay" chart-name="交易额"></my-only-bar-chart>
-        </div>
-      </el-col>
-    </el-row>
-
+      <el-row :gutter="32">
+        <el-col :xs="24" :sm="24" :lg="12">
+          <div class="chart-wrapper">
+            <pie-chart :chart-data="taskTodayData" chart-name="今日任务"/>
+          </div>
+        </el-col>
+        <el-col :xs="24" :sm="24" :lg="12">
+          <div class="chart-wrapper">
+            <my-only-bar-chart :bar-data="dealPriceByDay" chart-name="交易额"></my-only-bar-chart>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <div v-else></div>
 
   </div>
 </template>
@@ -103,6 +105,8 @@ import {
 } from '@/api/manage/statics'
 import LineChartComponent from '@/views/dashboard/LineChartComponent.vue'
 import MyOnlyBarChart from '@/views/dashboard/MyOnlyBarChart.vue'
+import hasPermi from '@/directive/permission/hasPermi'
+import { checkPermi } from '@/utils/permission'
 
 const lineChartData = {
   newVisitis: {
@@ -125,6 +129,11 @@ const lineChartData = {
 
 export default {
   name: 'Index',
+  computed: {
+    hasPermi() {
+      return hasPermi
+    }
+  },
   components: {
     MyOnlyBarChart,
     LineChartComponent,
@@ -148,15 +157,18 @@ export default {
     }
   },
   created() {
-    this.getTaskCountInfo()
-    this.getClientCountInfo()
-    this.getDemandCountInfo()
-    this.getDealCountInfo()
-    this.getTaskTodayDataInfo()
-    this.getDealPriceByDayInfo()
-    this.getDealAndDemandInfo()
+    if (checkPermi(['manage:statics:statics'])) {
+      this.getTaskCountInfo()
+      this.getClientCountInfo()
+      this.getDemandCountInfo()
+      this.getDealCountInfo()
+      this.getTaskTodayDataInfo()
+      this.getDealPriceByDayInfo()
+      this.getDealAndDemandInfo()
+    }
   },
   methods: {
+    checkPermi,
     getTaskCountInfo() {
       getTaskCount().then(response => {
         this.taskCount = response.data.count
