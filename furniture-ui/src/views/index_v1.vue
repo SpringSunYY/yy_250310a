@@ -78,7 +78,7 @@
         </el-col>
         <el-col :xs="24" :sm="24" :lg="12">
           <div class="chart-wrapper">
-            <my-only-bar-chart :bar-data="dealPriceByDay" chart-name="交易额"></my-only-bar-chart>
+            <my-only-bar-chart :bar-data="dealPriceByDay" bar-name="交易额"></my-only-bar-chart>
           </div>
         </el-col>
       </el-row>
