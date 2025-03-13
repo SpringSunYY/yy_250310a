@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lz.manage.mapper.StaticsMapper">
+
+
+    <select id="getDemandCount" resultType="com.lz.manage.model.vo.statics.StaticCountVo">
+        select count(id) as count from tb_client_demand_info
+        <where>
+            <if test="id != null "> and id = #{id}</if>
+            <if test="clientId != null "> and client_id = #{clientId}</if>
+            <if test="demandName != null  and demandName != ''"> and demand_name like concat('%', #{demandName}, '%')</if>
+            <if test="params.beginExpectStartTime != null and params.beginExpectStartTime != '' and params.endExpectStartTime != null and params.endExpectStartTime != ''"> and expect_start_time between #{params.beginExpectStartTime} and #{params.endExpectStartTime}</if>
+            <if test="params.beginExpectEndTime != null and params.beginExpectEndTime != '' and params.endExpectEndTime != null and params.endExpectEndTime != ''"> and expect_end_time between #{params.beginExpectEndTime} and #{params.endExpectEndTime}</if>
+            <if test="demandStatus != null  and demandStatus != ''"> and demand_status = #{demandStatus}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''"> and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+    <select id="getTaskCount" resultType="com.lz.manage.model.vo.statics.StaticCountVo">
+        select count(id) as count from tb_task_info
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="clientId != null ">and client_id = #{clientId}</if>
+            <if test="demandId != null ">and demand_id = #{demandId}</if>
+            <if test="taskName != null  and taskName != ''">and task_name like concat('%', #{taskName}, '%')</if>
+            <if test="taskStatus != null  and taskStatus != ''">and task_status = #{taskStatus}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="deptId != null ">and dept_id = #{deptId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''">
+                and create_time between #{params.beginCreateTime} and #{params.endCreateTime}
+            </if>
+            <if test="updateBy != null  and updateBy != ''">and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''">
+                and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}
+            </if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+    <select id="getDealCount" resultType="com.lz.manage.model.vo.statics.StaticCountPriceVo">
+        select sum(total_price) as count from tb_client_deal_info
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="clientId != null ">and client_id = #{clientId}</if>
+            <if test="demandId != null ">and demand_id = #{demandId}</if>
+            <if test="payStatus != null  and payStatus != ''">and pay_status = #{payStatus}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+            <if test="deptId != null ">and dept_id = #{deptId}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''">
+                and create_time between #{params.beginCreateTime} and #{params.endCreateTime}
+            </if>
+            <if test="updateBy != null  and updateBy != ''">and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.beginUpdateTime != null and params.beginUpdateTime != '' and params.endUpdateTime != null and params.endUpdateTime != ''">
+                and update_time between #{params.beginUpdateTime} and #{params.endUpdateTime}
+            </if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
+    </select>
+</mapper>
