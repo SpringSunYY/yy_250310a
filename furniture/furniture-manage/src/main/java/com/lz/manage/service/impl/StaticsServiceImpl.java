@@ -9,10 +9,7 @@ import com.lz.manage.model.domain.ClientInfo;
 import com.lz.manage.model.domain.TaskInfo;
 import com.lz.manage.model.dto.statics.StaticsBaseDto;
 import com.lz.manage.model.enums.TaskStatusEnum;
-import com.lz.manage.model.vo.statics.StaticCountPriceVo;
-import com.lz.manage.model.vo.statics.StaticCountVo;
-import com.lz.manage.model.vo.statics.StaticsBaseVo;
-import com.lz.manage.model.vo.statics.StaticsPieVo;
+import com.lz.manage.model.vo.statics.*;
 import com.lz.manage.service.IClientDemandInfoService;
 import com.lz.manage.service.IClientInfoService;
 import com.lz.manage.service.IStaticsService;
@@ -96,5 +93,41 @@ public class StaticsServiceImpl implements IStaticsService {
         pieVo.setValues(values);
         pieVo.setNames(names);
         return pieVo;
+    }
+
+    @Override
+    public StaticsLineChartVo<Long> getDealAndDemandByDay(StaticsBaseDto staticsBaseDto) {
+        StaticsLineChartVo<Long> longStaticsLineChartVo = new StaticsLineChartVo<>();
+        ArrayList<String> chartXData = new ArrayList<>();
+        longStaticsLineChartVo.setChartXData(chartXData);
+        ArrayList<StaticsLineChartVo<Long>.chartYDataVo> chartYData = new ArrayList<>();
+        longStaticsLineChartVo.setChartYData(chartYData);
+
+        //交易数量
+        List<StaticsBaseVo<Long>> dealList = staticsMapper.getDealCountByDay(staticsBaseDto);
+        StaticsLineChartVo<Long>.chartYDataVo yDataVoDeal = longStaticsLineChartVo.new chartYDataVo();
+        ArrayList<Long> dealValue = new ArrayList<>();
+        yDataVoDeal.setName("交易数量");
+        for (StaticsBaseVo<Long> baseVo : dealList) {
+            chartXData.add(baseVo.getName());
+            dealValue.add(baseVo.getValue());
+        }
+        yDataVoDeal.setValue(dealValue);
+
+        List<StaticsBaseVo<Long>> demandCountByDay = staticsMapper.getDemandCountByDay(staticsBaseDto);
+        StaticsLineChartVo<Long>.chartYDataVo yDataVoDemand = longStaticsLineChartVo.new chartYDataVo();
+        ArrayList<Long> demandValue = new ArrayList<>();
+        yDataVoDemand.setName("需求数量");
+        for (StaticsBaseVo<Long> baseVo : demandCountByDay) {
+            demandValue.add(baseVo.getValue());
+        }
+        yDataVoDemand.setValue(demandValue);
+
+        chartYData.add(yDataVoDeal);
+        chartYData.add(yDataVoDemand);
+
+        longStaticsLineChartVo.setChartYData(chartYData);
+        longStaticsLineChartVo.setChartXData(chartXData);
+        return longStaticsLineChartVo;
     }
 }

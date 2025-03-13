@@ -78,4 +78,13 @@ public class StaticsController extends BaseController {
         staticsBaseDto.setStartTime(new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000));
         return success(staticsService.getDealPriceByDay(staticsBaseDto));
     }
+
+    @PreAuthorize("@ss.hasPermi('manage:statics:statics')")
+    @GetMapping("/getDealAndDemandByDay")
+    public AjaxResult getDealAndDemandByDay(StaticsBaseDto staticsBaseDto) {
+        staticsBaseDto.setEndTime(new Date());
+        //开始时间七天前
+        staticsBaseDto.setStartTime(new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000));
+        return success(staticsService.getDealAndDemandByDay(staticsBaseDto));
+    }
 }

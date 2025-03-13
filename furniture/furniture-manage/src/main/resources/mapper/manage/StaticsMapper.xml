@@ -106,4 +106,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         GROUP BY ds.report_date
         ORDER BY ds.report_date;
     </select>
+    <select id="getDealCountByDay" resultType="com.lz.manage.model.vo.statics.StaticsBaseVo">
+        WITH RECURSIVE date_series AS (SELECT DATE (#{startTime}) AS report_date
+        UNION ALL
+        SELECT DATE_ADD(report_date, INTERVAL 1 DAY)
+        FROM date_series
+        WHERE report_date &lt; DATE (#{endTime})
+        )
+        SELECT ds.report_date as name,
+        IFNULL(count(t.id), 0) AS value
+        FROM date_series ds
+        LEFT JOIN tb_client_deal_info t
+        ON DATE (t.create_time) = ds.report_date
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        GROUP BY ds.report_date
+        ORDER BY ds.report_date;
+    </select>
+    <select id="getDemandCountByDay" resultType="com.lz.manage.model.vo.statics.StaticsBaseVo">
+        WITH RECURSIVE date_series AS (SELECT DATE (#{startTime}) AS report_date
+        UNION ALL
+        SELECT DATE_ADD(report_date, INTERVAL 1 DAY)
+        FROM date_series
+        WHERE report_date &lt; DATE (#{endTime})
+        )
+        SELECT ds.report_date as name,
+        IFNULL(count(t.id), 0) AS value
+        FROM date_series ds
+        LEFT JOIN tb_client_demand_info t
+        ON DATE (t.create_time) = ds.report_date
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        GROUP BY ds.report_date
+        ORDER BY ds.report_date;
+    </select>
 </mapper>

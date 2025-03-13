@@ -5,10 +5,7 @@ import com.lz.manage.model.domain.ClientDemandInfo;
 import com.lz.manage.model.domain.ClientInfo;
 import com.lz.manage.model.domain.TaskInfo;
 import com.lz.manage.model.dto.statics.StaticsBaseDto;
-import com.lz.manage.model.vo.statics.StaticCountPriceVo;
-import com.lz.manage.model.vo.statics.StaticCountVo;
-import com.lz.manage.model.vo.statics.StaticsBaseVo;
-import com.lz.manage.model.vo.statics.StaticsPieVo;
+import com.lz.manage.model.vo.statics.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -86,4 +83,15 @@ public interface IStaticsService {
      * return: com.lz.manage.model.vo.statics.StaticsPieVo<java.math.BigDecimal>
      **/
     StaticsPieVo<BigDecimal> getDealPriceByDay(StaticsBaseDto staticsBaseDto);
+
+    /**
+     * description:  获取需求和成交价格折线图
+     * author: YY
+     * method: getDealAndDemandByDay
+     * date: 2025/3/13 11:33
+     * param:
+     * param: staticsBaseDto
+     * return: com.lz.manage.model.vo.statics.StaticsLineChartVo
+     **/
+    StaticsLineChartVo<Long> getDealAndDemandByDay(StaticsBaseDto staticsBaseDto);
 }

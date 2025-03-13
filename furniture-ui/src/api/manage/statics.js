@@ -48,3 +48,11 @@ export function getDealPriceByDay(query) {
     params: query
   })
 }
+
+export function getDealAndDemandByDay(query) {
+  return request({
+    url: '/manage/statics/getDealAndDemandByDay',
+    method: 'get',
+    params: query
+  })
+}

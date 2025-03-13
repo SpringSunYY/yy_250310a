@@ -66,7 +66,7 @@
     </el-row>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart-component :chart-name="'任务总数'"/>
+      <line-chart-component :chart-data="dealAndDemandInfo" :chart-name="'需求和交易'"/>
     </el-row>
 
     <el-row :gutter="32">
@@ -94,7 +94,7 @@ import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
 import CountTo from 'vue-count-to'
 import {
-  getClientCount,
+  getClientCount, getDealAndDemandByDay,
   getDealCount,
   getDealPriceByDay,
   getDemandCount,
@@ -143,7 +143,8 @@ export default {
       demandCount: 0,
       dealCount: 0,
       taskTodayData: [],
-      dealPriceByDay: {}
+      dealPriceByDay: {},
+      dealAndDemandInfo: {}
     }
   },
   created() {
@@ -153,6 +154,7 @@ export default {
     this.getDealCountInfo()
     this.getTaskTodayDataInfo()
     this.getDealPriceByDayInfo()
+    this.getDealAndDemandInfo()
   },
   methods: {
     getTaskCountInfo() {
@@ -183,6 +185,11 @@ export default {
     getDealPriceByDayInfo() {
       getDealPriceByDay().then(response => {
         this.dealPriceByDay = response.data
+      })
+    },
+    getDealAndDemandInfo() {
+      getDealAndDemandByDay().then(res => {
+        this.dealAndDemandInfo = res.data
       })
     },
     handleSetLineChartData(type) {

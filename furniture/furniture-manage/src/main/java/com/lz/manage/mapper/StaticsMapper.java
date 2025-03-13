@@ -29,5 +29,9 @@ public interface StaticsMapper {
     List<StaticsBaseVo<Long>> getTaskByDay(TaskInfo taskInfo);
 
     List<StaticsBaseVo<BigDecimal>> getDealPriceByDay(StaticsBaseDto staticsBaseDto);
+
+    List<StaticsBaseVo<Long>> getDealCountByDay(StaticsBaseDto staticsBaseDto);
+
+    List<StaticsBaseVo<Long>> getDemandCountByDay(StaticsBaseDto staticsBaseDto);
 }
 
